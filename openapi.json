@@ -1,0 +1,902 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hlamburg public API",
+    "version": "1.6.34",
+    "description": "Read-only JSON. Player coins, bags and payments are not here."
+  },
+  "servers": [
+    {
+      "url": "https://hlam.besthost.one/api/public/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "game"
+    },
+    {
+      "name": "players"
+    },
+    {
+      "name": "market"
+    }
+  ],
+  "paths": {
+    "/status": {
+      "get": {
+        "operationId": "status",
+        "tags": [
+          "game"
+        ],
+        "summary": "Game status and version",
+        "description": "Version, mode and the number of residents.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "bad_request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "overloaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/season": {
+      "get": {
+        "operationId": "season",
+        "tags": [
+          "game"
+        ],
+        "summary": "Current season",
+        "description": "Number, end date and level cap.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Season"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "bad_request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "overloaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tops/{kind}": {
+      "get": {
+        "operationId": "tops",
+        "tags": [
+          "players"
+        ],
+        "summary": "Player tops",
+        "description": "The first 100 places. Hidden profiles are left out.",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "level",
+                "league",
+                "season"
+              ]
+            },
+            "description": "Top kind: level, league, season."
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ru",
+                "en"
+              ],
+              "default": "ru"
+            },
+            "description": "Language of names: ru or en."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Rows to return, up to 100."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 99,
+              "default": 0
+            },
+            "description": "Rows to skip."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Top"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "bad_request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "overloaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/{id}": {
+      "get": {
+        "operationId": "player",
+        "tags": [
+          "players"
+        ],
+        "summary": "Public profile",
+        "description": "By number or custom address. A hidden profile returns 404.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^([1-9][0-9]{0,11}|[a-z][a-z0-9_-]{2,19})$"
+            },
+            "description": "Player number or address."
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ru",
+                "en"
+              ],
+              "default": "ru"
+            },
+            "description": "Language of names: ru or en."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "bad_request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "not_found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "overloaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/market/prices": {
+      "get": {
+        "operationId": "prices",
+        "tags": [
+          "market"
+        ],
+        "summary": "Market prices",
+        "description": "Average price and sales per rarity for the week.",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ru",
+                "en"
+              ],
+              "default": "ru"
+            },
+            "description": "Language of names: ru or en."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Prices"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "bad_request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "overloaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {},
+    {
+      "key": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "key": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A key from the game settings: Authorization: Bearer hk_…"
+      }
+    },
+    "schemas": {
+      "Status": {
+        "type": "object",
+        "properties": {
+          "game": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "maintenance"
+            ]
+          },
+          "players": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "game",
+          "version",
+          "status",
+          "players",
+          "time"
+        ],
+        "additionalProperties": false
+      },
+      "Badge": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tier": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tier_name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "tier",
+          "tier_name",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "Pin": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "ShowItem": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+          }
+        },
+        "required": [
+          "name",
+          "rarity"
+        ],
+        "additionalProperties": false
+      },
+      "Player": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "slug": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "seniority": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "avatar": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "badges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Badge"
+            }
+          },
+          "achievements": {
+            "type": "object",
+            "properties": {
+              "got": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pinned": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Pin"
+                }
+              }
+            },
+            "required": [
+              "got",
+              "total",
+              "pinned"
+            ],
+            "additionalProperties": false
+          },
+          "showcase": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShowItem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "slug",
+          "name",
+          "level",
+          "title",
+          "seniority",
+          "avatar",
+          "badges",
+          "achievements",
+          "showcase"
+        ],
+        "additionalProperties": false
+      },
+      "TopRow": {
+        "type": "object",
+        "properties": {
+          "place": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "place",
+          "id",
+          "name",
+          "level",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "Top": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopRow"
+            }
+          }
+        },
+        "required": [
+          "kind",
+          "total",
+          "limit",
+          "offset",
+          "rows"
+        ],
+        "additionalProperties": false
+      },
+      "Price": {
+        "type": "object",
+        "properties": {
+          "rarity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+          },
+          "name": {
+            "type": "string"
+          },
+          "avg": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sales": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "trend": {
+            "type": "integer",
+            "enum": [
+              -1,
+              0,
+              1
+            ]
+          }
+        },
+        "required": [
+          "rarity",
+          "name",
+          "avg",
+          "sales",
+          "trend"
+        ],
+        "additionalProperties": false
+      },
+      "Prices": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "fee_percent": {
+            "type": "number"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Price"
+            }
+          }
+        },
+        "required": [
+          "currency",
+          "fee_percent",
+          "rows"
+        ],
+        "additionalProperties": false
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "key": {
+            "type": "string"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "days_left": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max_level": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "number",
+          "key",
+          "ends_at",
+          "days_left",
+          "max_level"
+        ],
+        "additionalProperties": false
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retry_after": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "error",
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

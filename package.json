@@ -1,0 +1,19 @@
+{
+  "name": "@hlamburg/sdk",
+  "version": "0.1.0",
+  "description": "Клиент публичного API Хламбурга и встраивание игры",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist", "openapi.json"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "gen": "node scripts/gen-types.mjs",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/client.test.js",
+    "prepare": "npm run build"
+  },
+  "devDependencies": { "typescript": "^5.9.3" }
+}
